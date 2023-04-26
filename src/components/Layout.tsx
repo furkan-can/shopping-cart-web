@@ -3,7 +3,6 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListIcon from "@mui/icons-material/List";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
-import { Badge } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -113,9 +112,9 @@ export default function DashboardLayout() {
               component={Link}
               to="/basket"
             > */}
-            <Badge badgeContent={5} color="success">
+            {/* <Badge badgeContent={5} color="success">
               <ShoppingBasketIcon />
-            </Badge>
+            </Badge> */}
             {/* </IconButton> */}
           </Box>
         </Toolbar>
