@@ -4,29 +4,35 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { IProduct } from "./../../Interfaces/interfaces";
 import "./Product.scss";
+import { handleAddToCart } from "../../utils";
 
 function Product() {
   const { id } = useParams();
   const [product, setProduct] = useState<IProduct | null>(null);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
-    axios.get(`https://fakestoreapi.com/products/${id}`).then((response) => {
+    const fetchProduct = async () => {
+      const response = await axios.get(
+        `https://fakestoreapi.com/products/${id}`
+      );
       setProduct(response.data);
-    });
+    };
+    fetchProduct();
   }, [id]);
-  const [showFullDescription, setShowFullDescription] = useState(false);
 
   if (!product) {
     return <div>Loading...</div>;
   }
+
   const maxDescriptionLength = 200;
-  let truncatedDescription = product.description.substring(
+  const truncatedDescription = product.description.substring(
     0,
     maxDescriptionLength
   );
 
-  const handleAddToCart = () => {
-    // Sepete ekleme işlemleri burada yapılabilir.
+  const handleClick = async (productId: number) => {
+    handleAddToCart(productId);
   };
 
   return (
@@ -49,13 +55,13 @@ function Product() {
         )}
       </Typography>
       <Typography variant="h5" align="right">
-        {product.price + "₺"}
+        {product.price}₺
       </Typography>
       <Button
         className="btn"
         variant="contained"
         color="primary"
-        onClick={handleAddToCart}
+        onClick={() => handleClick(product.id)}
       >
         Add to Cart
       </Button>

@@ -8,13 +8,22 @@ import {
 import { IProduct } from "../../Interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 import "./ProductCard.scss";
+import { FC } from "react";
 
-function Product(props: IProduct) {
+const Product: FC<{
+  product: IProduct;
+  handleAddToCart: (productId: number) => void;
+}> = ({ product, handleAddToCart }) => {
   const navigate = useNavigate();
   const maxTitleLength = 50;
 
   const navigateTo = (path: string) => {
     navigate(path);
+  };
+
+  const handleAddToCartClick = (event: any) => {
+    event.stopPropagation();
+    handleAddToCart(product.id);
   };
 
   return (
@@ -26,37 +35,35 @@ function Product(props: IProduct) {
       <Card className="product-card">
         <div
           onClick={() => {
-            navigateTo("/products/" + props.id);
+            navigateTo("/products/" + product.id);
           }}
         >
           <CardMedia
             className="image"
             component="img"
-            image={props.image}
-            alt={props.title}
+            image={product.image}
+            alt={product.title}
           />
           <CardContent>
             <Typography className="title" variant="h6">
-              {props.title.length > maxTitleLength
-                ? props.title.substring(0, maxTitleLength) + "..."
-                : props.title}
+              {product.title.length > maxTitleLength
+                ? product.title.substring(0, maxTitleLength) + "..."
+                : product.title}
             </Typography>
             <Typography className="category" variant="subtitle1">
-              {props.category}
+              {product.category}
             </Typography>
             <div className="price-button-container">
               <Button
                 variant="contained"
                 color="success"
-                onClick={(event) => {
-                  event.stopPropagation();
-                }}
+                onClick={(event) => handleAddToCartClick(event)}
               >
                 Add to Cart
               </Button>
 
               <Typography variant="h5" align="right">
-                {props.price + "₺"}
+                {product.price + "₺"}
               </Typography>
             </div>
           </CardContent>
@@ -64,6 +71,6 @@ function Product(props: IProduct) {
       </Card>
     </div>
   );
-}
+};
 
 export default Product;

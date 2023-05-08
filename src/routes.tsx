@@ -1,7 +1,7 @@
 import { useRoutes } from "react-router-dom";
 import DashboardLayout from "./components/Layout";
 import Product from "./pages/Product/Product";
-import ShoppingCart from "./pages/ShoppingCart";
+import ShoppingCart from "./pages/ShoppingCart/ShoppingCart";
 import ProductList from "./pages/ProductList/ProductList";
 import { Page404 } from "./pages/Page404";
 import Home from "./pages/Home";

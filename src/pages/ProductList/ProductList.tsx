@@ -4,6 +4,7 @@ import { IProduct } from "../../Interfaces/interfaces";
 import { Grid } from "@mui/material";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import "./ProductList.scss";
+import { handleAddToCart } from "../../utils";
 
 function ProductList() {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -25,7 +26,10 @@ function ProductList() {
       >
         {products.map((product) => (
           <Grid item key={product.id}>
-            <ProductCard {...product} />
+            <ProductCard
+              product={product}
+              handleAddToCart={() => handleAddToCart(product.id)}
+            />
           </Grid>
         ))}
       </Grid>
