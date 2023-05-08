@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { IProduct } from "./../Interfaces/interfaces";
+import { IProduct } from "../../Interfaces/interfaces";
 import { Grid } from "@mui/material";
-import ProductCard from "../components/ProductCard/ProductCard";
+import ProductCard from "../../components/ProductCard/ProductCard";
+import "./ProductList.scss";
 
 function ProductList() {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -14,7 +15,7 @@ function ProductList() {
   }, []);
 
   return (
-    <>
+    <div className="product-list">
       <Grid
         container
         justifyContent="center"
@@ -28,7 +29,7 @@ function ProductList() {
           </Grid>
         ))}
       </Grid>
-    </>
+    </div>
   );
 }
 
