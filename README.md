@@ -9,32 +9,32 @@ We aim to have the opportunity to be evaluated with a workshop that we will hold
 ## Project Structure
 
 shopping-cart-web/
-├── src/
-│ ├── Interfaces/
-│ │ └── interfaces.ts
-│ ├── components/
-│ │ ├── ProductCard/
-│ │ │ ├── ProductCard.tsxa
-│ │ │ └── ProductCard.scss
-│ │ └── Layout.tsx
-│ ├── pages/
-│ │ ├── Product
-│ │ │ ├── Product.tsx
-│ │ │ └── Product.scss
-│ │ ├── ProductList
-│ │ │ ├── ProductList.tsx
-│ │ │ └── ProductList.scss
-│ │ ├── ShoppingCart
-│ │ │ ├── ShoppingCart.tsx
-│ │ │ └── ShoppingCart.scss
-│ │ └── ...
-│ ├── services/
-│ │ ├── CartService.ts
-│ │ ├── DiscountService.ts
-│ │ └── ProductService.ts
-│ ├── App.tsx
-│ └── index.tsx
-└── ...
+|-- src/
+|   |-- Interfaces/
+|   |   |-- interfaces.ts
+|   |-- components/
+|   |   |-- ProductCard/
+|   |   |   |-- ProductCard.tsx
+|   |   |   |-- ProductCard.scss
+|   |   |-- Layout.tsx
+|   |-- pages/
+|   |   |-- Product/
+|   |   |   |-- Product.tsx
+|   |   |   |-- Product.scss
+|   |   |-- ProductList/
+|   |   |   |-- ProductList.tsx
+|   |   |   |-- ProductList.scss
+|   |   |-- ShoppingCart/
+|   |   |   |-- ShoppingCart.tsx
+|   |   |   |-- ShoppingCart.scss
+|   |   |-- ...
+|   |-- services/
+|   |   |-- CartService.ts
+|   |   |-- DiscountService.ts
+|   |   |-- ProductService.ts
+|   |-- App.tsx
+|   |-- index.tsx
+|-- ...
 
 - The `src` directory contains the project source codes.
 - The `components` directory contains the React components used in the project. Each component represents a part of the user interface and increases reusability.
