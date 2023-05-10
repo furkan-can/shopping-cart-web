@@ -17,6 +17,7 @@ import { Page404 } from "../Page404";
 import "./ShoppingCart.scss";
 import { Clear } from "@mui/icons-material";
 import { ProductService } from "./../../services/ProductService";
+import { useNavigate } from "react-router-dom";
 
 // Alışveriş Sepeti sayfası.
 function ShoppingCart() {
@@ -26,6 +27,8 @@ function ShoppingCart() {
   const discountService = new DiscountService();
   // Ürünleri çekmek için ProductService'i oluşturuyoruz.
   const productService = new ProductService();
+  // React Router'dan navigate fonksiyonunu alıyoruz.
+  const navigate = useNavigate();
 
   // Toplam fiyatı tutmak için state.
   const [totalPrice, setTotalPrice] = useState(0);
@@ -57,6 +60,21 @@ function ShoppingCart() {
   // İndirim kodunu uygulamak için fonksiyon.
   const handleApplyDiscount = () => {
     try {
+      if (discountCode === "") {
+        alert("Please enter a discount code.");
+        return;
+      }
+
+      if (isDiscountApplied) {
+        alert("Discount code already applied.");
+        return;
+      }
+
+      if (totalPrice === 0) {
+        alert("You can't apply discount code to empty cart.");
+        return;
+      }
+
       setDiscountedPrice(
         discountService.calculateDiscountedPrice(totalPrice, discountCode)
       );
@@ -133,10 +151,21 @@ function ShoppingCart() {
       if (success) {
         const newProducts = products.filter((p) => p.id !== productId);
         setProducts(newProducts);
+        handleCancelDiscount();
       }
     } catch (error) {
       console.error(error);
     }
+  }
+
+  // Satın al butonuna basıldığında çalışacak fonksiyon.
+  async function handleBuy() {
+    if (products.length === 0) {
+      alert("Your shopping cart is empty.");
+      return;
+    }
+    alert("Thank you for your purchase!");
+    navigate("/");
   }
 
   // Ürün bilgileri tamamlanana kadar "Loading..." yazdırıyoruz.
@@ -230,7 +259,12 @@ function ShoppingCart() {
             <span>{discountedPrice.toFixed(2)}₺</span>
           </div>
         )}
-        <Button className="buy-button" variant="contained" color="primary">
+        <Button
+          className="buy-button"
+          variant="contained"
+          color="primary"
+          onClick={handleBuy}
+        >
           Buy Now
         </Button>
       </div>
