@@ -11,7 +11,7 @@ We aim to have the opportunity to be evaluated with a workshop that we will hold
 - The `src` directory contains the project source codes.
 - The `components` directory contains the React components used in the project. Each component represents a part of the user interface and increases reusability.
 - The `pages` directory contains React components of different pages. Each page corresponds to a URL route, allowing users to navigate different sections.
-- The `interfaces` directory contains models prepared to provide type protection.
+- The `interfaces` directory contains models prepared to provide type safe.
 - The `services` directory contains service files used to access external services (eg API requests).
 - The `App.tsx` is the main component of the React app and bundles the other components together.
 - The `index.tsx` is the starting point of the React application and links the React application to HTML.
