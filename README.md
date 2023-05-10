@@ -20,8 +20,10 @@ We aim to have the opportunity to be evaluated with a workshop that we will hold
 
 After downloading the project run the following command inside the project directory to install the required dependencies:
 - npm install
+
 Run the following command to start the project:
 - npm start
+
 Go to http://localhost:3000 in your web browser and view the e-commerce site.
 
 ## Usage
