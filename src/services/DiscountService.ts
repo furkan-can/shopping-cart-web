@@ -1,27 +1,36 @@
-export class DiscountService {
-  //EXAMPLE CODE AND DISCOUNT
-  private exampleCode: string = "ABC123";
-  private exampleDiscount: number = 0.5;
+import { couponsData } from "../constant";
 
+export class DiscountService {
+  // İndirim kodunun geçerli olup olmadığını kontrol eder
   private validateDiscountCode(discountCode: string): void {
-    // Discount code validation logic goes here.
-    if (discountCode !== this.exampleCode)
+    const validCouponIds = couponsData.coupons.map((coupon) =>
+      coupon.couponId.toUpperCase()
+    );
+    if (!validCouponIds.includes(discountCode)) {
       throw new Error("Invalid discount code");
-    // If the discount code is invalid, throw an exception.
+    }
   }
 
+  // İndirim koduna göre indirimli fiyatı hesaplar
   public calculateDiscountedPrice(
     totalPrice: number,
     discountCode: string
   ): number {
     this.validateDiscountCode(discountCode);
 
-    const discountedPrice = totalPrice * (1 - this.exampleDiscount);
+    const coupon = couponsData.coupons.find(
+      (coupon) => coupon.couponId.toUpperCase() === discountCode
+    );
 
-    // Get the discount amount or percentage based on the discount code.
+    if (coupon) {
+      if (coupon.discountType === "Amount") {
+        return totalPrice - coupon.value;
+      } else if (coupon.discountType === "Ratio") {
+        const discountPercentage = coupon.value / 100;
+        return totalPrice * (1 - discountPercentage);
+      }
+    }
 
-    // Calculate the discounted price.
-
-    return discountedPrice;
+    throw new Error("Invalid discount type");
   }
 }

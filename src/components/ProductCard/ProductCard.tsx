@@ -12,29 +12,39 @@ import { FC, useState } from "react";
 import { CartService } from "../../services/CartService";
 import { Page404 } from "../../pages/Page404";
 
+// Ürün kartı componenti.
 const Product: FC<{
   product: IProduct;
 }> = ({ product }) => {
+  // CartService'i kullanarak sepete ürün eklemek için cartService'i oluşturuyoruz.
   const cartService = new CartService(1);
+  // Ürünü sepete eklerken oluşan hataları tutmak için state.
   const [error, setError] = useState<string | null>(null);
 
+  // React Router'dan navigate fonksiyonunu alıyoruz.
   const navigate = useNavigate();
+  // Ürün başlığının maksimum uzunluğu.
   const maxTitleLength = 50;
 
+  // Ürün detay sayfasına yönlendirmek için fonksiyon.
   const navigateTo = (path: string) => {
     navigate(path);
   };
 
+  // Ürünü sepete ekle butonuna tıklandığında çalışacak fonksiyon.
   const handleAddToCartClick = async (event: any) => {
     event.stopPropagation();
     try {
+      // Ürünü sepete eklemek için cartService'in addItemToCart yöntemini çağırıyoruz.
       await cartService.addItemToCart(product.id);
     } catch (error) {
+      //Bir hata oluşursa, error state güncellenir ve hatayı loglara kaydediyoruz.
       setError("Error adding item to cart");
       console.error(error);
     }
   };
 
+  // Bir hata varsa, Page404 componentine error prop kullanarak hatayı gösteriyoruz.
   if (error) {
     return <Page404 error={error} />;
   }

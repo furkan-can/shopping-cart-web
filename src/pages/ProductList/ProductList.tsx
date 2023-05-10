@@ -6,10 +6,14 @@ import "./ProductList.scss";
 import { ProductService } from "../../services/ProductService";
 import { Page404 } from "../Page404";
 
+// Ürün listeleme sayfası.
 function ProductList() {
+  // Ürünleri tutmak için state.
   const [products, setProducts] = useState<IProduct[]>([]);
+  // Ürünleri çekerken oluşan hataları tutmak için state.
   const [error, setError] = useState<string | null>(null);
 
+  // Ürünleri çekmek için ProductService'i oluşturuyoruz.
   useEffect(() => {
     const productService = new ProductService();
     const fetchProducts = async () => {
@@ -24,6 +28,7 @@ function ProductList() {
     fetchProducts();
   }, []);
 
+  // Ürünler yüklenene kadar "Loading..." yazdırıyoruz.
   if (error) {
     return <Page404 error={error} />;
   }

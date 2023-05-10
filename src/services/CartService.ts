@@ -9,6 +9,7 @@ export class CartService {
     this.cartId = cartId;
   }
 
+  // Alışveriş sepeti bilgilerini getirir
   async getCart(): Promise<ICart> {
     try {
       const response: AxiosResponse = await axios.get(
@@ -22,6 +23,7 @@ export class CartService {
     }
   }
 
+  // Alışveriş sepetindeki ürünleri getirir
   async getCartProducts(): Promise<ICartProduct[]> {
     try {
       const response = await this.getCart();
@@ -33,6 +35,7 @@ export class CartService {
     }
   }
 
+  // Alışveriş sepetini günceller
   async updateCart(cartProducts: ICartProduct[]): Promise<boolean> {
     try {
       await axios.put(`${this.apiUrl}/${this.cartId}`, {
@@ -47,6 +50,7 @@ export class CartService {
     }
   }
 
+  // Alışveriş sepetine ürün ekler
   async addItemToCart(productId: number): Promise<boolean> {
     try {
       const cartProducts: ICartProduct[] = await this.getCartProducts();
@@ -70,6 +74,7 @@ export class CartService {
     }
   }
 
+  // Alışveriş sepetinden ürün çıkarır
   async removeItemFromCart(productId: number): Promise<boolean> {
     try {
       const cartProducts: ICartProduct[] = await this.getCartProducts();

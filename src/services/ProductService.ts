@@ -4,6 +4,7 @@ import { IProduct } from "../Interfaces/interfaces";
 export class ProductService {
   private apiUrl: string = "https://fakestoreapi.com/products";
 
+  // Ürün listesini getirir
   async getProducts(): Promise<IProduct[]> {
     try {
       const response: AxiosResponse = await axios.get(this.apiUrl);
@@ -15,6 +16,7 @@ export class ProductService {
     }
   }
 
+  // Ürün detayını getirir
   async getProduct(productId: number): Promise<IProduct> {
     try {
       const response: AxiosResponse = await axios.get(
@@ -28,6 +30,7 @@ export class ProductService {
     }
   }
 
+  // Sadece verilen ürün id'lerine ait ürünleri getirir
   async getProductsByIds(productIds: number[]): Promise<IProduct[]> {
     try {
       const products = await this.getProducts();
