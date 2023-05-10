@@ -16,14 +16,10 @@ import { Page404 } from "../../pages/Page404";
 const Product: FC<{
   product: IProduct;
 }> = ({ product }) => {
-  // CartService'i kullanarak sepete ürün eklemek için cartService'i oluşturuyoruz.
   const cartService = new CartService(1);
-  // Ürünü sepete eklerken oluşan hataları tutmak için state.
   const [error, setError] = useState<string | null>(null);
 
-  // React Router'dan navigate fonksiyonunu alıyoruz.
   const navigate = useNavigate();
-  // Ürün başlığının maksimum uzunluğu.
   const maxTitleLength = 50;
 
   // Ürün detay sayfasına yönlendirmek için fonksiyon.

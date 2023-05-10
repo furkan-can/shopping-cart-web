@@ -9,17 +9,11 @@ import { Page404 } from "../Page404";
 
 // Ürün detay sayfası.
 function Product() {
-  // React Router'dan useParams hook'unu kullanarak url'den id parametresini alıyoruz.
   const { id } = useParams();
-  // id parametresini number tipine çeviriyoruz.
   const productId = Number(id);
-  // CartService'i kullanarak sepete ürün eklemek için cartService'i oluşturuyoruz.
   const cartService = new CartService(1);
-  // Ürünü sepete eklerken oluşan hataları tutmak için state.
   const [error, setError] = useState<string | null>(null);
-  // Ürünü tutmak için state.
   const [product, setProduct] = useState<IProduct | null>(null);
-  // Ürün açıklamasının tamamını göstermek veya gizlemek için state.
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   // useEffect hook'unu kullanarak, component yüklendiğinde ürünü getiriyoruz.
@@ -42,7 +36,6 @@ function Product() {
     return <div>Loading...</div>;
   }
 
-  // Ürün başlığının maksimum uzunluğu.
   const maxDescriptionLength = 200;
   // Ürün açıklamasını kısaltıyoruz.
   const truncatedDescription = product.description.substring(

@@ -21,29 +21,18 @@ import { useNavigate } from "react-router-dom";
 
 // Alışveriş Sepeti sayfası.
 function ShoppingCart() {
-  // Sepet işlemleri için CartService'i oluşturuyoruz.
   const cartService = new CartService(1);
-  // İndirim işlemleri için DiscountService'i oluşturuyoruz.
   const discountService = new DiscountService();
-  // Ürünleri çekmek için ProductService'i oluşturuyoruz.
   const productService = new ProductService();
-  // React Router'dan navigate fonksiyonunu alıyoruz.
   const navigate = useNavigate();
 
-  // Toplam fiyatı tutmak için state.
   const [totalPrice, setTotalPrice] = useState(0);
-  // İndirim uygulanmış fiyatı tutmak için state.
   const [discountedPrice, setDiscountedPrice] = useState(totalPrice);
 
-  // Sepetteki ürünleri tutmak için state.
   const [products, setProducts] = useState<IProduct[]>([]);
-  // Sepetteki ürünleri çekerken yükleniyor olup olmadığını tutmak için state.
   const [loading, setLoading] = useState(false);
-  // Sepetteki ürünleri çekerken oluşan hataları tutmak için state.
   const [error, setError] = useState("");
-  // İndirim kodunu tutmak için state.
   const [discountCode, setDiscountCode] = useState("");
-  // İndirim uygulanıp uygulanmadığını tutmak için state.
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
 
   // Sepetteki ürünlerin toplam fiyatını hesaplamak için fonksiyon.

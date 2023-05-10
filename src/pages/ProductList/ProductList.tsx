@@ -8,9 +8,7 @@ import { Page404 } from "../Page404";
 
 // Ürün listeleme sayfası.
 function ProductList() {
-  // Ürünleri tutmak için state.
   const [products, setProducts] = useState<IProduct[]>([]);
-  // Ürünleri çekerken oluşan hataları tutmak için state.
   const [error, setError] = useState<string | null>(null);
 
   // Ürünleri çekmek için ProductService'i oluşturuyoruz.
