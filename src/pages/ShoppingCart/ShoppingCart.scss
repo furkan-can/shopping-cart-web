@@ -13,19 +13,37 @@
     justify-content: space-between;
   }
 
-  .price {
-  }
-
   .discount {
-    .MuiButton-contained {
-    }
-
     .discount-code {
       display: flex !important;
       align-content: center;
     }
   }
+}
 
-  .buy-button {
+@media screen and (max-width: 768px) {
+  .pay-container {
+    float: left;
+
+    .location {
+      flex-direction: column;
+      gap: 1rem;
+      margin-right: 0;
+    }
+
+    .discount {
+      display: flex !important;
+      align-content: center;
+      flex-direction: row !important;
+      justify-content: start;
+
+      .MuiFormControl-root {
+        width: 70%;
+      }
+
+      .MuiButton-contained {
+        width: 30%;
+      }
+    }
   }
 }
