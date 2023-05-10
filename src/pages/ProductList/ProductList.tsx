@@ -1,19 +1,31 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { IProduct } from "../../Interfaces/interfaces";
 import { Grid } from "@mui/material";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import "./ProductList.scss";
-import { handleAddToCart } from "../../utils";
+import { ProductService } from "../../services/ProductService";
 
 function ProductList() {
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get("https://fakestoreapi.com/products").then((response) => {
-      setProducts(response.data);
-    });
+    const productService = new ProductService();
+    const fetchProducts = async () => {
+      try {
+        const response = await productService.getProducts();
+        setProducts(response);
+      } catch (error) {
+        setError("Error fetching product.");
+        console.error(error);
+      }
+    };
+    fetchProducts();
   }, []);
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="product-list">
@@ -26,10 +38,7 @@ function ProductList() {
       >
         {products.map((product) => (
           <Grid item key={product.id}>
-            <ProductCard
-              product={product}
-              handleAddToCart={() => handleAddToCart(product.id)}
-            />
+            <ProductCard product={product} />
           </Grid>
         ))}
       </Grid>

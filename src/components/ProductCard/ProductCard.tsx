@@ -8,12 +8,15 @@ import {
 import { IProduct } from "../../Interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 import "./ProductCard.scss";
-import { FC } from "react";
+import { FC, useState } from "react";
+import { CartService } from "../../services/CartService";
 
 const Product: FC<{
   product: IProduct;
-  handleAddToCart: (productId: number) => void;
-}> = ({ product, handleAddToCart }) => {
+}> = ({ product }) => {
+  const cartService = new CartService(1);
+  const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
   const maxTitleLength = 50;
 
@@ -21,10 +24,19 @@ const Product: FC<{
     navigate(path);
   };
 
-  const handleAddToCartClick = (event: any) => {
+  const handleAddToCartClick = async (event: any) => {
     event.stopPropagation();
-    handleAddToCart(product.id);
+    try {
+      await cartService.addItemToCart(product.id);
+    } catch (error) {
+      setError("Error adding item to cart");
+      console.error(error);
+    }
   };
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div

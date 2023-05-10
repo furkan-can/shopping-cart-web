@@ -1,25 +1,32 @@
 import { Typography, Button, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { IProduct } from "./../../Interfaces/interfaces";
 import "./Product.scss";
-import { handleAddToCart } from "../../utils";
+import { CartService } from "../../services/CartService";
+import { ProductService } from "../../services/ProductService";
 
 function Product() {
   const { id } = useParams();
+  const productId = Number(id);
+  const cartService = new CartService(1);
+  const [error, setError] = useState<string | null>(null);
   const [product, setProduct] = useState<IProduct | null>(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
+    const productService = new ProductService();
     const fetchProduct = async () => {
-      const response = await axios.get(
-        `https://fakestoreapi.com/products/${id}`
-      );
-      setProduct(response.data);
+      try {
+        const response = await productService.getProduct(productId);
+        setProduct(response);
+      } catch (error) {
+        setError("Error fetching product.");
+        console.error(error);
+      }
     };
     fetchProduct();
-  }, [id]);
+  }, [productId]);
 
   if (!product) {
     return <div>Loading...</div>;
@@ -31,9 +38,18 @@ function Product() {
     maxDescriptionLength
   );
 
-  const handleClick = async (productId: number) => {
-    handleAddToCart(productId);
+  const handleAddToCartClick = async () => {
+    try {
+      await cartService.addItemToCart(productId);
+    } catch (error) {
+      setError("Error adding product to cart.");
+      console.error(error);
+    }
   };
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <Grid className="container" item xs={12} md={10}>
@@ -61,7 +77,7 @@ function Product() {
         className="btn"
         variant="contained"
         color="primary"
-        onClick={() => handleClick(product.id)}
+        onClick={() => handleAddToCartClick()}
       >
         Add to Cart
       </Button>
