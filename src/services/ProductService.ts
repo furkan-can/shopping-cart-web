@@ -27,4 +27,14 @@ export class ProductService {
       throw new Error("Product fetch error");
     }
   }
+
+  async getProductsByIds(productIds: number[]): Promise<IProduct[]> {
+    try {
+      const products = await this.getProducts();
+      return products.filter((product) => productIds.includes(product.id));
+    } catch (error) {
+      console.error(error);
+      throw new Error("Product fetch error");
+    }
+  }
 }

@@ -4,6 +4,7 @@ import { Grid } from "@mui/material";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import "./ProductList.scss";
 import { ProductService } from "../../services/ProductService";
+import { Page404 } from "../Page404";
 
 function ProductList() {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -24,7 +25,7 @@ function ProductList() {
   }, []);
 
   if (error) {
-    return <div>{error}</div>;
+    return <Page404 error={error} />;
   }
 
   return (

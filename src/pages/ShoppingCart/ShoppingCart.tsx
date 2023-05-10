@@ -11,97 +11,97 @@ import {
   IconButton,
 } from "@mui/material";
 import { CartService } from "../../services/CartService";
-import axios from "axios";
-import { IProduct } from "../../Interfaces/interfaces";
+import { DiscountService } from "../../services/DiscountService";
+import { ICartProduct, IProduct } from "../../Interfaces/interfaces";
 import { Page404 } from "../Page404";
 import "./ShoppingCart.scss";
 import { Clear } from "@mui/icons-material";
+import { ProductService } from "./../../services/ProductService";
 
 function ShoppingCart() {
   const cartService = new CartService(1);
+  const discountService = new DiscountService();
+  const productService = new ProductService();
+
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [discountedPrice, setDiscountedPrice] = useState(totalPrice);
+
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [discountCode, setDiscountCode] = useState("");
-  const [discount, setDiscount] = useState(0);
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
 
-  const handleApplyDiscount = () => {
-    const isValidDiscountCode = discountCode === "ABC123";
+  useEffect(() => {
+    setTotalPrice(
+      products.reduce(
+        (acc, product) => acc + product.price * product.quantity,
+        0
+      )
+    );
+    setDiscountedPrice(totalPrice);
+  }, [products, totalPrice]);
 
-    if (isValidDiscountCode) {
-      setDiscount(0.1);
+  const handleApplyDiscount = () => {
+    try {
+      setDiscountedPrice(
+        discountService.calculateDiscountedPrice(totalPrice, discountCode)
+      );
       setIsDiscountApplied(true);
       return;
+    } catch (error) {
+      setDiscountCode("");
+      alert("Invalid discount code");
+      console.error(error);
     }
-
-    setDiscount(0);
-    setDiscountCode("");
-    alert("Invalid discount code");
   };
 
-  const cancelDiscount = () => {
-    setDiscount(0);
+  const handleCancelDiscount = () => {
     setDiscountCode("");
     setIsDiscountApplied(false);
+    setDiscountedPrice(totalPrice);
   };
-
-  const totalPrice = products.reduce(
-    (acc, product) => acc + product.price * product.quantity,
-    0
-  );
-  const discountedPrice = totalPrice * (1 - discount);
 
   useEffect(() => {
     async function fetchCart() {
+      setLoading(true);
       try {
-        setLoading(true);
-        getProductsFromCart();
+        const productsInfoInCart = await cartService.getCartProducts();
+        await getProductsDetailsFromCart(productsInfoInCart);
       } catch (error: any) {
-        setError(error.message);
+        setError(`Error fetching cart.`);
       } finally {
         setLoading(false);
       }
     }
 
     fetchCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <Page404 />;
-  }
-
-  if (!products) {
-    return <div>Your shopping cart is empty.</div>;
-  }
-
-  async function getProductsFromCart() {
-    const productsInCart = await cartService.getCartProducts();
-    const productIds = productsInCart.map((p) => p.productId);
-
-    const response = await axios.get<IProduct[]>(
-      "https://fakestoreapi.com/products"
-    );
-
-    const products = response.data.filter((product) =>
-      productIds.includes(product.id)
-    );
-
-    const productsWithQuantity = products.map((product) => {
-      const cartProduct = productsInCart.find(
-        (p) => p.productId === product.id
+  async function getProductsDetailsFromCart(
+    productsInfoInCart: ICartProduct[]
+  ) {
+    const productIds = productsInfoInCart.map((p) => p.productId);
+    try {
+      const cartProductsDetails = await productService.getProductsByIds(
+        productIds
       );
-      return {
-        ...product,
-        quantity: cartProduct ? cartProduct.quantity : 0,
-      };
-    });
-
-    setProducts(productsWithQuantity);
+      const cartProductsDetailsWithQuantity = cartProductsDetails.map(
+        (product) => {
+          const cartProduct = productsInfoInCart.find(
+            (p) => p.productId === product.id
+          );
+          return {
+            ...product,
+            quantity: cartProduct ? cartProduct.quantity : 0,
+          };
+        }
+      );
+      setProducts(cartProductsDetailsWithQuantity);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function handleRemoveFromCart(productId: number) {
@@ -114,6 +114,18 @@ function ShoppingCart() {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <Page404 error={error} />;
+  }
+
+  if (!products) {
+    return <div>Your shopping cart is empty.</div>;
   }
 
   return (
@@ -173,7 +185,7 @@ function ShoppingCart() {
               onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
             />
             {discountCode && isDiscountApplied && (
-              <IconButton onClick={() => cancelDiscount()}>
+              <IconButton onClick={() => handleCancelDiscount()}>
                 <Clear />
               </IconButton>
             )}
@@ -186,10 +198,12 @@ function ShoppingCart() {
             Apply
           </Button>
         </div>
-        <div className="discount-price location">
-          <strong>Total Price after Discount:</strong>
-          <span>{discountedPrice.toFixed(2)}₺</span>
-        </div>
+        {isDiscountApplied && (
+          <div className="discount-price location">
+            <strong>Total Price after Discount:</strong>
+            <span>{discountedPrice.toFixed(2)}₺</span>
+          </div>
+        )}
         <Button className="buy-button" variant="contained" color="primary">
           Buy Now
         </Button>

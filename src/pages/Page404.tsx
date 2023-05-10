@@ -12,7 +12,7 @@ const StyledContainer = styled(Container)(() => ({
   justifyContent: "center",
 }));
 
-export const Page404 = (): JSX.Element => {
+export const Page404 = (props: any): JSX.Element => {
   const navigate = useNavigate();
 
   const navigateToDashboard = () => {
@@ -42,6 +42,18 @@ export const Page404 = (): JSX.Element => {
           justifyContent="center"
         >
           404
+        </Typography>
+
+        <Typography
+          color={"error"}
+          sx={{
+            fontSize: { xs: "32px", md: "38px" },
+            fontWeight: "500",
+            textAlign: "center",
+          }}
+          variant="subtitle1"
+        >
+          {props.error}
         </Typography>
 
         <Button

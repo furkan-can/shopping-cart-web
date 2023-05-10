@@ -5,6 +5,7 @@ import { IProduct } from "./../../Interfaces/interfaces";
 import "./Product.scss";
 import { CartService } from "../../services/CartService";
 import { ProductService } from "../../services/ProductService";
+import { Page404 } from "../Page404";
 
 function Product() {
   const { id } = useParams();
@@ -48,7 +49,7 @@ function Product() {
   };
 
   if (error) {
-    return <div>{error}</div>;
+    return <Page404 error={error} />;
   }
 
   return (

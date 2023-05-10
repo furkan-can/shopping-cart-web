@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import "./ProductCard.scss";
 import { FC, useState } from "react";
 import { CartService } from "../../services/CartService";
+import { Page404 } from "../../pages/Page404";
 
 const Product: FC<{
   product: IProduct;
@@ -35,7 +36,7 @@ const Product: FC<{
   };
 
   if (error) {
-    return <div>{error}</div>;
+    return <Page404 error={error} />;
   }
 
   return (
